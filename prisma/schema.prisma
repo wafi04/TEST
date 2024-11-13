@@ -1,0 +1,101 @@
+  // Prisma Schema (dengan tambahan Cart)
+
+  generator client {
+    provider = "prisma-client-js"
+  }
+
+  datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+  }
+
+  model User {
+    id        String    @id @default(cuid())
+    name      String    @unique
+    email     String    @unique
+    password  String
+    saldo     Float    @default(5000000)
+    image     String?
+    createdAt DateTime  @default(now())
+    products  Product[] 
+    carts     Cart[]
+      notifications Notification[]
+
+
+    @@index([email])
+  }
+
+  model Product {
+    id           String       @id @default(cuid())
+    name         String
+    category     String
+    description  String
+    color        String
+    gender       String
+    image        String
+    price        Float
+    createdAt    DateTime     @default(now())
+    updatedAt    DateTime?
+    seller       User         @relation(fields: [sellerId], references: [id])
+    sellerId     String
+    cart   CartItem[]
+    Inventory  Inventory[] 
+
+    @@index([category])
+    @@index([sellerId])
+  }
+
+  model Inventory {
+    id        Int   @id @default(autoincrement())
+    size      String
+    quantity  Int
+    productId String   
+    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@index([productId])
+  }
+
+
+model Cart {
+  id     String @id @default(cuid())
+  userId String
+  items  CartItem[]
+  createdAt  DateTime @default(now())
+  total   Float
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  cartId    String
+  productId String
+  total  Float
+  quantity  Int
+  isCheckout   Boolean
+  createdAt DateTime  @default(now())
+  size   String
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+
+
+model Notification {
+  id          String    @id @default(cuid())
+  userId      String
+  type        NotificationType
+  message     String
+  isRead      Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? 
+  user        User      @relation(fields: [userId], references: [id])
+}
+
+enum NotificationType {
+  CART_ITEM_ADDED
+  CART_ITEM_UPDATED
+  PRODUCT_ADDED
+  PAYMENT_SUCCESS
+  STOCK_LOW
+  GENERAL
+}
