@@ -8,7 +8,7 @@ I build this project from scratch.
 ```
 project/
 ├── frontend/          # React.js frontend (branch: frontend)
-└── backend/           # Nest.js backend (branch: main)
+└── backend/           # Nest.js backend (branch: backend)
 ```
 
 ## Frontend (React.js)
