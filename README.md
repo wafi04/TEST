@@ -30,9 +30,8 @@ Sebelum memulai, pastikan Anda memiliki hal-hal berikut:
      ```bash
      yarn add @nestjs/typeorm typeorm pg
      ```
-     - `@nestjs/typeorm`: Integrasi TypeORM dengan NestJS
-     - `typeorm`: ORM untuk database
-     - `pg`: Driver untuk database PostgreSQL
+     - `@prisma/client`: Integrasi Prisma dengan NestJS
+     - `prisma`: ORM untuk database
 
 3. **Konfigurasi Database**:
 
